@@ -1,0 +1,10 @@
+{
+  "rules": {
+    "phone_users": {
+      "$phone": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      }
+    }
+  }
+}

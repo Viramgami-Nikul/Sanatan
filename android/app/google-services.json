@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "508158902265",
+    "firebase_url": "https://santvani-50c76-default-rtdb.firebaseio.com",
+    "project_id": "santvani-50c76",
+    "storage_bucket": "santvani-50c76.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:508158902265:android:583ec5008c75647f234728",
+        "android_client_info": {
+          "package_name": "com.example.santvani_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyzg8HrdZ45FkGprgoRhayTAdQHcfwqAg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
