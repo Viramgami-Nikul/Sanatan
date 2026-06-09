@@ -17,6 +17,8 @@ import 'package:santvani_app/views/splash/splash_screen.dart';
 import 'package:santvani_app/views/tab_navigation/tab_navigation_view.dart';
 import 'package:santvani_app/views/post/post_screen.dart';
 import 'package:santvani_app/views/chat/chat_screen.dart';
+import 'package:santvani_app/views/setting/setting_screen.dart';
+import 'package:santvani_app/views/setting/saved_posts_screen.dart';
 
 class AppRoutes {
   static Map<String, WidgetBuilder> getRoutes() {
@@ -69,6 +71,12 @@ class AppRoutes {
       // ----------------------------------------------------------------------
       RouteName.privacyPolicyScreen: (final BuildContext context) =>
           PrivacyPolicyScreen(),
+
+      RouteName.settingsScreen: (final BuildContext context) =>
+          const SettingsScreen(),
+
+      RouteName.savedPostsScreen: (final BuildContext context) =>
+          const SavedPostsScreen(),
     };
   }
 }

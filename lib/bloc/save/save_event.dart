@@ -10,4 +10,8 @@ abstract class SaveEvent with _$SaveEvent {
     required String postId,
     required bool isSaved,
   }) = OnToggleSave;
+
+  const factory SaveEvent.onLoadSavedPosts({
+    required String userId,
+  }) = OnLoadSavedPosts;
 }

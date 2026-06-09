@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:santvani_app/data/api/either.dart';
 import 'package:santvani_app/data/errors/failure.dart';
 import 'package:santvani_app/data/models/post/save_model.dart';
+import 'package:santvani_app/data/models/post/post_model.dart';
 import 'package:santvani_app/data/repository/save_repo.dart';
 import 'package:santvani_app/utils/app_enums.dart';
 
@@ -74,6 +75,32 @@ class SaveBloc extends Bloc<SaveEvent, SaveState> {
           emit(state.copyWith(
             status: CommonScreenState.success,
             isSaved: event.isSaved,
+          ));
+        },
+      );
+    });
+
+    on<OnLoadSavedPosts>((
+      final OnLoadSavedPosts event,
+      final Emitter<SaveState> emit,
+    ) async {
+      emit(state.copyWith(status: CommonScreenState.loading));
+
+      final Either<Failure, List<PostModel>> result = await saveRepo.getSavedPosts(
+        userId: event.userId,
+      );
+
+      result.fold(
+        (final Failure failure) {
+          emit(state.copyWith(
+            status: CommonScreenState.error,
+            errorMessage: failure.message,
+          ));
+        },
+        (final List<PostModel> posts) {
+          emit(state.copyWith(
+            status: CommonScreenState.success,
+            savedPosts: posts,
           ));
         },
       );

@@ -31,6 +31,8 @@ class RouteName {
   static const String postScreen = '/post_screen';
 
   // -------------------- Settings & Info -------------------- //
+  static const String settingsScreen = '/settings_screen';
+  static const String savedPostsScreen = '/saved_posts_screen';
   static const String privacyPolicyScreen = '/privacy_policy_screen';
   static const String termsConditionScreen = '/terms_condition_screen';
   static const String aboutUsScreen = '/about_us_screen';

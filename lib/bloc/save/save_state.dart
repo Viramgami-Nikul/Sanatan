@@ -5,6 +5,7 @@ abstract class SaveState with _$SaveState {
   factory SaveState({
     required CommonScreenState status,
     required bool isSaved,
+    required List<PostModel> savedPosts,
     String? errorMessage,
   }) = _SaveState;
 
@@ -12,6 +13,7 @@ abstract class SaveState with _$SaveState {
     return SaveState(
       status: CommonScreenState.initial,
       isSaved: false,
+      savedPosts: const <PostModel>[],
       errorMessage: null,
     );
   }

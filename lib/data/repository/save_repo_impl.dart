@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:santvani_app/data/api/either.dart';
 import 'package:santvani_app/data/errors/failure.dart';
 import 'package:santvani_app/data/models/post/save_model.dart';
+import 'package:santvani_app/data/models/post/post_model.dart';
 import 'save_repo.dart';
 
 class SaveRepoImpl implements SaveRepo {
@@ -49,6 +50,70 @@ class SaveRepoImpl implements SaveRepo {
       final String saveId = '${userId}_$postId';
       final DocumentSnapshot saveSnapshot = await FirebaseFirestore.instance.collection('saves').doc(saveId).get();
       return Right(saveSnapshot.exists);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<PostModel>>> getSavedPosts({
+    required final String userId,
+  }) async {
+    try {
+      final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('saves')
+          .where('userId', isEqualTo: userId)
+          .get();
+
+      final List<String> postIds = querySnapshot.docs.map((final doc) => doc.get('postId') as String).toList();
+      
+      if (postIds.isEmpty) {
+        return const Right(<PostModel>[]);
+      }
+
+      final List<PostModel> posts = [];
+      final List<Future<DocumentSnapshot>> futures = postIds.map((final id) {
+        return FirebaseFirestore.instance.collection('post').doc(id).get();
+      }).toList();
+
+      final List<DocumentSnapshot> postSnapshots = await Future.wait(futures);
+
+      for (final DocumentSnapshot snap in postSnapshots) {
+        if (snap.exists) {
+          posts.add(PostModel.fromJson(snap.data() as Map<String, dynamic>));
+        }
+      }
+
+      // Sort posts in memory by createdAt descending
+      posts.sort((final a, final b) {
+        final dynamic aTime = a.createdAt;
+        final dynamic bTime = b.createdAt;
+        
+        if (aTime == null && bTime == null) return 0;
+        if (aTime == null) return -1;
+        if (bTime == null) return 1;
+        
+        DateTime? aDate;
+        DateTime? bDate;
+        if (aTime is Timestamp) {
+          aDate = aTime.toDate();
+        } else if (aTime is DateTime) {
+          aDate = aTime;
+        }
+        
+        if (bTime is Timestamp) {
+          bDate = bTime.toDate();
+        } else if (bTime is DateTime) {
+          bDate = bTime;
+        }
+        
+        if (aDate == null && bDate == null) return 0;
+        if (aDate == null) return -1;
+        if (bDate == null) return 1;
+        return bDate.compareTo(aDate);
+      });
+
+      return Right(posts);
     } catch (e) {
       return Left(ApiFailure(message: e.toString()));
     }

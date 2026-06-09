@@ -25,6 +25,8 @@ import 'package:santvani_app/data/repository/share_repo.dart';
 import 'package:santvani_app/data/repository/share_repo_impl.dart';
 import 'package:santvani_app/data/repository/save_repo.dart';
 import 'package:santvani_app/data/repository/save_repo_impl.dart';
+import 'package:santvani_app/data/repository/setting_repo.dart';
+import 'package:santvani_app/data/repository/setting_repo_impl.dart';
 import 'package:santvani_app/data/repository/chat_repo.dart';
 import 'package:santvani_app/data/repository/chat_repo_impl.dart';
 import 'package:santvani_app/data/repository/category_repo.dart';
@@ -153,6 +155,13 @@ List<RepositoryProvider<dynamic>> getRepoProviders() {
     // ------------------------------------------------------------------------
     RepositoryProvider<SaveRepo>(
       create: (final BuildContext context) => SaveRepoImpl(),
+    ),
+
+    // ------------------------------------------------------------------------
+    // Setting Repository
+    // ------------------------------------------------------------------------
+    RepositoryProvider<SettingRepo>(
+      create: (final BuildContext context) => SettingRepoImpl(),
     ),
 
     // ------------------------------------------------------------------------

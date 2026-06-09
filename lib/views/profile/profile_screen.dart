@@ -19,6 +19,7 @@ import 'package:santvani_app/views/profile/widget/profile_actions_widget.dart';
 import 'package:santvani_app/views/profile/widget/profile_post_grid_widget.dart';
 
 import 'package:santvani_app/components/bottom_sheet/create_options_bottom_sheet.dart';
+import 'package:santvani_app/routes/routes_name.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -232,7 +233,7 @@ class ProfileScreen extends StatelessWidget {
                           child: IconButton(
                             icon: const Icon(Icons.menu_rounded, size: 18, color: Color(0xFFE65100)),
                             onPressed: () {
-                              context.read<ProfileBloc>().add(OnTapLogout());
+                              Navigator.pushNamed(context, RouteName.settingsScreen);
                             },
                             padding: EdgeInsets.zero,
                             constraints: const BoxConstraints(),

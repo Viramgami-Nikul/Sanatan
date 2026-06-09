@@ -14,61 +14,30 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SaveEvent {
 
- String get postId;
-/// Create a copy of SaveEvent
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$SaveEventCopyWith<SaveEvent> get copyWith => _$SaveEventCopyWithImpl<SaveEvent>(this as SaveEvent, _$identity);
+
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SaveEvent&&(identical(other.postId, postId) || other.postId == postId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SaveEvent);
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,postId);
+int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'SaveEvent(postId: $postId)';
+  return 'SaveEvent()';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $SaveEventCopyWith<$Res>  {
-  factory $SaveEventCopyWith(SaveEvent value, $Res Function(SaveEvent) _then) = _$SaveEventCopyWithImpl;
-@useResult
-$Res call({
- String postId
-});
-
-
-
-
-}
-/// @nodoc
-class _$SaveEventCopyWithImpl<$Res>
-    implements $SaveEventCopyWith<$Res> {
-  _$SaveEventCopyWithImpl(this._self, this._then);
-
-  final SaveEvent _self;
-  final $Res Function(SaveEvent) _then;
-
-/// Create a copy of SaveEvent
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? postId = null,}) {
-  return _then(_self.copyWith(
-postId: null == postId ? _self.postId : postId // ignore: cast_nullable_to_non_nullable
-as String,
-  ));
-}
-
+class $SaveEventCopyWith<$Res>  {
+$SaveEventCopyWith(SaveEvent _, $Res Function(SaveEvent) __);
 }
 
 
@@ -86,12 +55,13 @@ extension SaveEventPatterns on SaveEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( OnCheckSaveStatus value)?  onCheckSaveStatus,TResult Function( OnToggleSave value)?  onToggleSave,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( OnCheckSaveStatus value)?  onCheckSaveStatus,TResult Function( OnToggleSave value)?  onToggleSave,TResult Function( OnLoadSavedPosts value)?  onLoadSavedPosts,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case OnCheckSaveStatus() when onCheckSaveStatus != null:
 return onCheckSaveStatus(_that);case OnToggleSave() when onToggleSave != null:
-return onToggleSave(_that);case _:
+return onToggleSave(_that);case OnLoadSavedPosts() when onLoadSavedPosts != null:
+return onLoadSavedPosts(_that);case _:
   return orElse();
 
 }
@@ -109,12 +79,13 @@ return onToggleSave(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( OnCheckSaveStatus value)  onCheckSaveStatus,required TResult Function( OnToggleSave value)  onToggleSave,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( OnCheckSaveStatus value)  onCheckSaveStatus,required TResult Function( OnToggleSave value)  onToggleSave,required TResult Function( OnLoadSavedPosts value)  onLoadSavedPosts,}){
 final _that = this;
 switch (_that) {
 case OnCheckSaveStatus():
 return onCheckSaveStatus(_that);case OnToggleSave():
-return onToggleSave(_that);case _:
+return onToggleSave(_that);case OnLoadSavedPosts():
+return onLoadSavedPosts(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -131,12 +102,13 @@ return onToggleSave(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( OnCheckSaveStatus value)?  onCheckSaveStatus,TResult? Function( OnToggleSave value)?  onToggleSave,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( OnCheckSaveStatus value)?  onCheckSaveStatus,TResult? Function( OnToggleSave value)?  onToggleSave,TResult? Function( OnLoadSavedPosts value)?  onLoadSavedPosts,}){
 final _that = this;
 switch (_that) {
 case OnCheckSaveStatus() when onCheckSaveStatus != null:
 return onCheckSaveStatus(_that);case OnToggleSave() when onToggleSave != null:
-return onToggleSave(_that);case _:
+return onToggleSave(_that);case OnLoadSavedPosts() when onLoadSavedPosts != null:
+return onLoadSavedPosts(_that);case _:
   return null;
 
 }
@@ -153,11 +125,12 @@ return onToggleSave(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String postId)?  onCheckSaveStatus,TResult Function( String postId,  bool isSaved)?  onToggleSave,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String postId)?  onCheckSaveStatus,TResult Function( String postId,  bool isSaved)?  onToggleSave,TResult Function( String userId)?  onLoadSavedPosts,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case OnCheckSaveStatus() when onCheckSaveStatus != null:
 return onCheckSaveStatus(_that.postId);case OnToggleSave() when onToggleSave != null:
-return onToggleSave(_that.postId,_that.isSaved);case _:
+return onToggleSave(_that.postId,_that.isSaved);case OnLoadSavedPosts() when onLoadSavedPosts != null:
+return onLoadSavedPosts(_that.userId);case _:
   return orElse();
 
 }
@@ -175,11 +148,12 @@ return onToggleSave(_that.postId,_that.isSaved);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String postId)  onCheckSaveStatus,required TResult Function( String postId,  bool isSaved)  onToggleSave,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String postId)  onCheckSaveStatus,required TResult Function( String postId,  bool isSaved)  onToggleSave,required TResult Function( String userId)  onLoadSavedPosts,}) {final _that = this;
 switch (_that) {
 case OnCheckSaveStatus():
 return onCheckSaveStatus(_that.postId);case OnToggleSave():
-return onToggleSave(_that.postId,_that.isSaved);case _:
+return onToggleSave(_that.postId,_that.isSaved);case OnLoadSavedPosts():
+return onLoadSavedPosts(_that.userId);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -196,11 +170,12 @@ return onToggleSave(_that.postId,_that.isSaved);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String postId)?  onCheckSaveStatus,TResult? Function( String postId,  bool isSaved)?  onToggleSave,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String postId)?  onCheckSaveStatus,TResult? Function( String postId,  bool isSaved)?  onToggleSave,TResult? Function( String userId)?  onLoadSavedPosts,}) {final _that = this;
 switch (_that) {
 case OnCheckSaveStatus() when onCheckSaveStatus != null:
 return onCheckSaveStatus(_that.postId);case OnToggleSave() when onToggleSave != null:
-return onToggleSave(_that.postId,_that.isSaved);case _:
+return onToggleSave(_that.postId,_that.isSaved);case OnLoadSavedPosts() when onLoadSavedPosts != null:
+return onLoadSavedPosts(_that.userId);case _:
   return null;
 
 }
@@ -215,11 +190,11 @@ class OnCheckSaveStatus implements SaveEvent {
   const OnCheckSaveStatus({required this.postId});
   
 
-@override final  String postId;
+ final  String postId;
 
 /// Create a copy of SaveEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
+@JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $OnCheckSaveStatusCopyWith<OnCheckSaveStatus> get copyWith => _$OnCheckSaveStatusCopyWithImpl<OnCheckSaveStatus>(this, _$identity);
 
@@ -245,7 +220,7 @@ String toString() {
 /// @nodoc
 abstract mixin class $OnCheckSaveStatusCopyWith<$Res> implements $SaveEventCopyWith<$Res> {
   factory $OnCheckSaveStatusCopyWith(OnCheckSaveStatus value, $Res Function(OnCheckSaveStatus) _then) = _$OnCheckSaveStatusCopyWithImpl;
-@override @useResult
+@useResult
 $Res call({
  String postId
 });
@@ -264,7 +239,7 @@ class _$OnCheckSaveStatusCopyWithImpl<$Res>
 
 /// Create a copy of SaveEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? postId = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? postId = null,}) {
   return _then(OnCheckSaveStatus(
 postId: null == postId ? _self.postId : postId // ignore: cast_nullable_to_non_nullable
 as String,
@@ -281,12 +256,12 @@ class OnToggleSave implements SaveEvent {
   const OnToggleSave({required this.postId, required this.isSaved});
   
 
-@override final  String postId;
+ final  String postId;
  final  bool isSaved;
 
 /// Create a copy of SaveEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
+@JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $OnToggleSaveCopyWith<OnToggleSave> get copyWith => _$OnToggleSaveCopyWithImpl<OnToggleSave>(this, _$identity);
 
@@ -312,7 +287,7 @@ String toString() {
 /// @nodoc
 abstract mixin class $OnToggleSaveCopyWith<$Res> implements $SaveEventCopyWith<$Res> {
   factory $OnToggleSaveCopyWith(OnToggleSave value, $Res Function(OnToggleSave) _then) = _$OnToggleSaveCopyWithImpl;
-@override @useResult
+@useResult
 $Res call({
  String postId, bool isSaved
 });
@@ -331,7 +306,7 @@ class _$OnToggleSaveCopyWithImpl<$Res>
 
 /// Create a copy of SaveEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? postId = null,Object? isSaved = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? postId = null,Object? isSaved = null,}) {
   return _then(OnToggleSave(
 postId: null == postId ? _self.postId : postId // ignore: cast_nullable_to_non_nullable
 as String,isSaved: null == isSaved ? _self.isSaved : isSaved // ignore: cast_nullable_to_non_nullable
@@ -343,9 +318,75 @@ as bool,
 }
 
 /// @nodoc
+
+
+class OnLoadSavedPosts implements SaveEvent {
+  const OnLoadSavedPosts({required this.userId});
+  
+
+ final  String userId;
+
+/// Create a copy of SaveEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$OnLoadSavedPostsCopyWith<OnLoadSavedPosts> get copyWith => _$OnLoadSavedPostsCopyWithImpl<OnLoadSavedPosts>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OnLoadSavedPosts&&(identical(other.userId, userId) || other.userId == userId));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,userId);
+
+@override
+String toString() {
+  return 'SaveEvent.onLoadSavedPosts(userId: $userId)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $OnLoadSavedPostsCopyWith<$Res> implements $SaveEventCopyWith<$Res> {
+  factory $OnLoadSavedPostsCopyWith(OnLoadSavedPosts value, $Res Function(OnLoadSavedPosts) _then) = _$OnLoadSavedPostsCopyWithImpl;
+@useResult
+$Res call({
+ String userId
+});
+
+
+
+
+}
+/// @nodoc
+class _$OnLoadSavedPostsCopyWithImpl<$Res>
+    implements $OnLoadSavedPostsCopyWith<$Res> {
+  _$OnLoadSavedPostsCopyWithImpl(this._self, this._then);
+
+  final OnLoadSavedPosts _self;
+  final $Res Function(OnLoadSavedPosts) _then;
+
+/// Create a copy of SaveEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? userId = null,}) {
+  return _then(OnLoadSavedPosts(
+userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
 mixin _$SaveState {
 
- CommonScreenState get status; bool get isSaved; String? get errorMessage;
+ CommonScreenState get status; bool get isSaved; List<PostModel> get savedPosts; String? get errorMessage;
 /// Create a copy of SaveState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -356,16 +397,16 @@ $SaveStateCopyWith<SaveState> get copyWith => _$SaveStateCopyWithImpl<SaveState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SaveState&&(identical(other.status, status) || other.status == status)&&(identical(other.isSaved, isSaved) || other.isSaved == isSaved)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SaveState&&(identical(other.status, status) || other.status == status)&&(identical(other.isSaved, isSaved) || other.isSaved == isSaved)&&const DeepCollectionEquality().equals(other.savedPosts, savedPosts)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,isSaved,errorMessage);
+int get hashCode => Object.hash(runtimeType,status,isSaved,const DeepCollectionEquality().hash(savedPosts),errorMessage);
 
 @override
 String toString() {
-  return 'SaveState(status: $status, isSaved: $isSaved, errorMessage: $errorMessage)';
+  return 'SaveState(status: $status, isSaved: $isSaved, savedPosts: $savedPosts, errorMessage: $errorMessage)';
 }
 
 
@@ -376,7 +417,7 @@ abstract mixin class $SaveStateCopyWith<$Res>  {
   factory $SaveStateCopyWith(SaveState value, $Res Function(SaveState) _then) = _$SaveStateCopyWithImpl;
 @useResult
 $Res call({
- CommonScreenState status, bool isSaved, String? errorMessage
+ CommonScreenState status, bool isSaved, List<PostModel> savedPosts, String? errorMessage
 });
 
 
@@ -393,11 +434,12 @@ class _$SaveStateCopyWithImpl<$Res>
 
 /// Create a copy of SaveState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? isSaved = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? isSaved = null,Object? savedPosts = null,Object? errorMessage = freezed,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as CommonScreenState,isSaved: null == isSaved ? _self.isSaved : isSaved // ignore: cast_nullable_to_non_nullable
-as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as bool,savedPosts: null == savedPosts ? _self.savedPosts : savedPosts // ignore: cast_nullable_to_non_nullable
+as List<PostModel>,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -483,10 +525,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CommonScreenState status,  bool isSaved,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CommonScreenState status,  bool isSaved,  List<PostModel> savedPosts,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SaveState() when $default != null:
-return $default(_that.status,_that.isSaved,_that.errorMessage);case _:
+return $default(_that.status,_that.isSaved,_that.savedPosts,_that.errorMessage);case _:
   return orElse();
 
 }
@@ -504,10 +546,10 @@ return $default(_that.status,_that.isSaved,_that.errorMessage);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CommonScreenState status,  bool isSaved,  String? errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CommonScreenState status,  bool isSaved,  List<PostModel> savedPosts,  String? errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _SaveState():
-return $default(_that.status,_that.isSaved,_that.errorMessage);case _:
+return $default(_that.status,_that.isSaved,_that.savedPosts,_that.errorMessage);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -524,10 +566,10 @@ return $default(_that.status,_that.isSaved,_that.errorMessage);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CommonScreenState status,  bool isSaved,  String? errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CommonScreenState status,  bool isSaved,  List<PostModel> savedPosts,  String? errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _SaveState() when $default != null:
-return $default(_that.status,_that.isSaved,_that.errorMessage);case _:
+return $default(_that.status,_that.isSaved,_that.savedPosts,_that.errorMessage);case _:
   return null;
 
 }
@@ -539,11 +581,18 @@ return $default(_that.status,_that.isSaved,_that.errorMessage);case _:
 
 
 class _SaveState implements SaveState {
-   _SaveState({required this.status, required this.isSaved, this.errorMessage});
+   _SaveState({required this.status, required this.isSaved, required final  List<PostModel> savedPosts, this.errorMessage}): _savedPosts = savedPosts;
   
 
 @override final  CommonScreenState status;
 @override final  bool isSaved;
+ final  List<PostModel> _savedPosts;
+@override List<PostModel> get savedPosts {
+  if (_savedPosts is EqualUnmodifiableListView) return _savedPosts;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_savedPosts);
+}
+
 @override final  String? errorMessage;
 
 /// Create a copy of SaveState
@@ -556,16 +605,16 @@ _$SaveStateCopyWith<_SaveState> get copyWith => __$SaveStateCopyWithImpl<_SaveSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SaveState&&(identical(other.status, status) || other.status == status)&&(identical(other.isSaved, isSaved) || other.isSaved == isSaved)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SaveState&&(identical(other.status, status) || other.status == status)&&(identical(other.isSaved, isSaved) || other.isSaved == isSaved)&&const DeepCollectionEquality().equals(other._savedPosts, _savedPosts)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,isSaved,errorMessage);
+int get hashCode => Object.hash(runtimeType,status,isSaved,const DeepCollectionEquality().hash(_savedPosts),errorMessage);
 
 @override
 String toString() {
-  return 'SaveState(status: $status, isSaved: $isSaved, errorMessage: $errorMessage)';
+  return 'SaveState(status: $status, isSaved: $isSaved, savedPosts: $savedPosts, errorMessage: $errorMessage)';
 }
 
 
@@ -576,7 +625,7 @@ abstract mixin class _$SaveStateCopyWith<$Res> implements $SaveStateCopyWith<$Re
   factory _$SaveStateCopyWith(_SaveState value, $Res Function(_SaveState) _then) = __$SaveStateCopyWithImpl;
 @override @useResult
 $Res call({
- CommonScreenState status, bool isSaved, String? errorMessage
+ CommonScreenState status, bool isSaved, List<PostModel> savedPosts, String? errorMessage
 });
 
 
@@ -593,11 +642,12 @@ class __$SaveStateCopyWithImpl<$Res>
 
 /// Create a copy of SaveState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? isSaved = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? isSaved = null,Object? savedPosts = null,Object? errorMessage = freezed,}) {
   return _then(_SaveState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as CommonScreenState,isSaved: null == isSaved ? _self.isSaved : isSaved // ignore: cast_nullable_to_non_nullable
-as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as bool,savedPosts: null == savedPosts ? _self._savedPosts : savedPosts // ignore: cast_nullable_to_non_nullable
+as List<PostModel>,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
