@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:santvani_app/bloc/like/like_bloc.dart';
 import 'package:santvani_app/bloc/share/share_bloc.dart';
+import 'package:santvani_app/bloc/save/save_bloc.dart';
 import 'package:santvani_app/data/repository/like_repo.dart';
 import 'package:santvani_app/data/repository/share_repo.dart';
+import 'package:santvani_app/data/repository/save_repo.dart';
 import 'package:santvani_app/theme/font_styles.dart';
 import 'package:santvani_app/utils/app_enums.dart';
 import 'package:santvani_app/components/bottom_sheet/comment_bottom_sheet.dart';
@@ -139,6 +141,14 @@ class _HomePostWidgetState extends State<HomePostWidget> with SingleTickerProvid
     context.read<LikeBloc>().add(LikeEvent.onToggleLike(postId: widget.post.id, isLiked: newLikedState));
   }
 
+  void _onSaveToggled(final BuildContext context) {
+    final bool newSavedState = !_isBookmarked;
+    setState(() {
+      _isBookmarked = newSavedState;
+    });
+    context.read<SaveBloc>().add(SaveEvent.onToggleSave(postId: widget.post.id, isSaved: newSavedState));
+  }
+
   void _onDoubleTapLiked(final BuildContext context) {
     if (!_isLiked) {
       setState(() {
@@ -170,6 +180,10 @@ class _HomePostWidgetState extends State<HomePostWidget> with SingleTickerProvid
         BlocProvider<ShareBloc>(
           create: (final BuildContext ctx) => ShareBloc(shareRepo: ctx.read<ShareRepo>()),
         ),
+        BlocProvider<SaveBloc>(
+          create: (final BuildContext ctx) => SaveBloc(saveRepo: ctx.read<SaveRepo>())
+            ..add(SaveEvent.onCheckSaveStatus(postId: widget.post.id)),
+        ),
       ],
       child: MultiBlocListener(
         listeners: <BlocListener<dynamic, dynamic>>[
@@ -178,6 +192,15 @@ class _HomePostWidgetState extends State<HomePostWidget> with SingleTickerProvid
               if (state.status == CommonScreenState.success && state.errorMessage == null) {
                 setState(() {
                   _isLiked = state.isLiked;
+                });
+              }
+            },
+          ),
+          BlocListener<SaveBloc, SaveState>(
+            listener: (final BuildContext ctx, final SaveState state) {
+              if (state.status == CommonScreenState.success && state.errorMessage == null) {
+                setState(() {
+                  _isBookmarked = state.isSaved;
                 });
               }
             },
@@ -566,11 +589,7 @@ class _HomePostWidgetState extends State<HomePostWidget> with SingleTickerProvid
                     color: _isBookmarked ? const Color(0xFFE65100) : const Color(0xFF8D6E63),
                     size: 22,
                   ),
-                  onPressed: () {
-                    setState(() {
-                      _isBookmarked = !_isBookmarked;
-                    });
-                  },
+                  onPressed: () => _onSaveToggled(ctx),
                 ),
               ],
             ),
