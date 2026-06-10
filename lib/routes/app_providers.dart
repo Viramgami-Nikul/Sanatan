@@ -7,6 +7,8 @@ import 'package:santvani_app/bloc/auth/signup/signup_bloc.dart';
 import 'package:santvani_app/bloc/my_app/localisation_bloc.dart';
 import 'package:santvani_app/bloc/tab_navigation_cubit.dart';
 import 'package:santvani_app/bloc/user/profile_bloc.dart';
+import 'package:santvani_app/bloc/setting/setting_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:santvani_app/data/repository/auth_repo.dart';
 import 'package:santvani_app/data/repository/auth_repo_impl.dart';
@@ -95,6 +97,12 @@ List<BlocProvider<StateStreamableSource<Object?>>> getAppProviders() {
     BlocProvider<CategoryBloc>(
       create: (final BuildContext context) =>
           CategoryBloc(categoryRepo: context.read<CategoryRepo>())..add(const CategoryEvent.loadCategories()),
+    ),
+
+    BlocProvider<SettingBloc>(
+      create: (final BuildContext context) => SettingBloc(
+        settingRepo: context.read<SettingRepo>(),
+      )..add(SettingEvent.onLoadSettings(userId: FirebaseAuth.instance.currentUser?.uid ?? '')),
     ),
   ];
 }

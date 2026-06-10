@@ -19,6 +19,7 @@ import 'package:santvani_app/views/post/post_screen.dart';
 import 'package:santvani_app/views/chat/chat_screen.dart';
 import 'package:santvani_app/views/setting/setting_screen.dart';
 import 'package:santvani_app/views/setting/saved_posts_screen.dart';
+import 'package:santvani_app/views/setting/following_followers_setting_screen.dart';
 
 class AppRoutes {
   static Map<String, WidgetBuilder> getRoutes() {
@@ -77,6 +78,9 @@ class AppRoutes {
 
       RouteName.savedPostsScreen: (final BuildContext context) =>
           const SavedPostsScreen(),
+
+      RouteName.followingFollowersSettingScreen: (final BuildContext context) =>
+          const FollowingFollowersSettingScreen(),
     };
   }
 }

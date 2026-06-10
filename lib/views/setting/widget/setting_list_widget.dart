@@ -148,7 +148,7 @@ class SettingListWidget extends StatelessWidget {
             _buildTile(
               icon: Icons.people_outline_rounded,
               title: 'Followers & Following',
-              onTap: () => _showSnackBar(context, 'Followers & Following details... 🌸🙏'),
+              onTap: () => Navigator.pushNamed(context, RouteName.followingFollowersSettingScreen),
             ),
             const Divider(height: 1, color: Color(0xFFFFF3E0)),
             _buildTile(
