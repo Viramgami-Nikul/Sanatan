@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 import 'package:santvani_app/helper/push_notification/notification_service.dart';
 import 'package:santvani_app/routes/routes_name.dart';
@@ -17,33 +18,16 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _animController;
-  late Animation<double> _fadeAnim;
-  late Animation<double> _scaleAnim;
+class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
     super.initState();
-    _animController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 900),
-    );
-    _fadeAnim = CurvedAnimation(
-      parent: _animController,
-      curve: Curves.easeIn,
-    );
-    _scaleAnim = Tween<double>(begin: 0.80, end: 1.0).animate(
-      CurvedAnimation(parent: _animController, curve: Curves.easeOutBack),
-    );
-    _animController.forward();
     _openInitialRoute();
   }
 
   @override
   void dispose() {
-    _animController.dispose();
     super.dispose();
   }
 
@@ -93,20 +77,16 @@ class _SplashScreenState extends State<SplashScreen>
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: <Color>[
-                Color(0xFF3A8DDD),
-                Color(0xFF2672C0),
-                Color(0xFF1A5FAA),
+                Color(0xFFFF5722), // Deep saffron orange
+                Color(0xFFFF8F00), // Radiant amber
+                Color(0xFFFFC107), // Gold glow
               ],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
           ),
-          child: FadeTransition(
-            opacity: _fadeAnim,
-            child: ScaleTransition(
-              scale: _scaleAnim,
-              child: const _SplashContent(),
-            ),
+          child: const Center(
+            child: _SplashContent(),
           ),
         ),
       ),
@@ -122,66 +102,104 @@ class _SplashContent extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        // santvani_app Circle Logo
+        // Glowing card container for the Sanatan Logo image
         Container(
           width: 140,
           height: 140,
           decoration: BoxDecoration(
-            color: const Color(0xFFB8D8F0),
+            color: Colors.white,
             shape: BoxShape.circle,
             boxShadow: <BoxShadow>[
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.12),
-                blurRadius: 30,
-                spreadRadius: 4,
-                offset: const Offset(0, 8),
+                color: Colors.black.withValues(alpha: 0.15),
+                blurRadius: 25,
+                spreadRadius: 2,
+                offset: const Offset(0, 10),
+              ),
+              BoxShadow(
+                color: const Color(0xFFFFD54F).withValues(alpha: 0.4),
+                blurRadius: 40,
+                spreadRadius: 8,
               ),
             ],
           ),
-          child: const Center(
+          child: ClipOval(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12.0),
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  'santvani_app',
-                  style: TextStyle(
-                    fontSize: 38,
-                    fontWeight: FontWeight.w800,
-                    color: Color(0xFF1E5FA8),
-                    letterSpacing: 1.5,
-                  ),
-                ),
+              padding: const EdgeInsets.all(12.0),
+              child: Image.asset(
+                'assets/png/sanatan.png',
+                fit: BoxFit.contain,
               ),
             ),
           ),
-        ),
+        )
+            .animate()
+            .fadeIn(duration: 800.ms, curve: Curves.easeOut)
+            .scale(
+              begin: const Offset(0.6, 0.6),
+              end: const Offset(1.0, 1.0),
+              duration: 800.ms,
+              curve: Curves.easeOutBack,
+            )
+            .then(delay: 200.ms)
+            .shimmer(
+              duration: 1200.ms,
+              color: Colors.white.withValues(alpha: 0.5),
+            ),
 
         const SizedBox(height: 36),
 
-        // App Name
+        // Brand App Name
         const Text(
-          'Vepar4u',
+          'Santvani',
           style: TextStyle(
-            fontSize: 32,
-            fontWeight: FontWeight.w700,
+            fontSize: 36,
+            fontWeight: FontWeight.w900,
             color: Colors.white,
-            letterSpacing: 0.5,
+            letterSpacing: 1.5,
+            shadows: <Shadow>[
+              Shadow(
+                color: Colors.black26,
+                offset: Offset(0, 4),
+                blurRadius: 8,
+              ),
+            ],
           ),
-        ),
+        )
+            .animate(delay: 500.ms)
+            .fadeIn(duration: 600.ms)
+            .slideY(
+              begin: 0.3,
+              end: 0.0,
+              curve: Curves.easeOutQuad,
+            ),
 
         const SizedBox(height: 10),
 
-        // Subtitle
+        // Subtitle / Tagline
         Text(
-          'Grow your distribution business',
+          'Sanatan Devotional & Bhajans',
           style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w400,
-            color: Colors.white.withValues(alpha: 0.75),
-            letterSpacing: 0.2,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: Colors.white.withValues(alpha: 0.9),
+            letterSpacing: 0.4,
+            shadows: const <Shadow>[
+              Shadow(
+                color: Colors.black26,
+                offset: Offset(0, 2),
+                blurRadius: 4,
+              ),
+            ],
           ),
-        ),
+        )
+            .animate(delay: 750.ms)
+            .fadeIn(duration: 600.ms)
+            .slideY(
+              begin: 0.3,
+              end: 0.0,
+              curve: Curves.easeOutQuad,
+            ),
       ],
     );
   }

@@ -206,6 +206,22 @@ class Utils {
       return null;
     }
   }
+
+  static Future<XFile?> pickVideo(
+      final PhotoPickerType photoPickerType,
+      ) async {
+    try {
+      final ImagePicker picker = ImagePicker();
+      return picker.pickVideo(
+        source: photoPickerType == PhotoPickerType.camera
+            ? ImageSource.camera
+            : ImageSource.gallery,
+      );
+    } catch (e) {
+      debugPrint('Video Picker Error : $e');
+      return null;
+    }
+  }
 }
 
 

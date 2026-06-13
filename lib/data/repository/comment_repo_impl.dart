@@ -24,6 +24,7 @@ class CommentRepoImpl implements CommentRepo {
       final String commentId = commentDoc.id;
 
       final DocumentReference postDoc = FirebaseFirestore.instance.collection('post').doc(postId);
+      final DocumentReference reelDoc = FirebaseFirestore.instance.collection('reels').doc(postId);
 
       final CommentModel comment = CommentModel(
         commentId: commentId,
@@ -37,6 +38,7 @@ class CommentRepoImpl implements CommentRepo {
 
       await FirebaseFirestore.instance.runTransaction((final Transaction transaction) async {
         final DocumentSnapshot postSnapshot = await transaction.get(postDoc);
+        final DocumentSnapshot reelSnapshot = await transaction.get(reelDoc);
 
         // Add comment document
         transaction.set(commentDoc, comment.toJson());
@@ -45,6 +47,11 @@ class CommentRepoImpl implements CommentRepo {
         if (postSnapshot.exists) {
           final int currentCommentsCount = (postSnapshot.data() as Map<String, dynamic>?)?['commentsCount'] as int? ?? 0;
           transaction.update(postDoc, <String, dynamic>{
+            'commentsCount': currentCommentsCount + 1,
+          });
+        } else if (reelSnapshot.exists) {
+          final int currentCommentsCount = (reelSnapshot.data() as Map<String, dynamic>?)?['commentsCount'] as int? ?? 0;
+          transaction.update(reelDoc, <String, dynamic>{
             'commentsCount': currentCommentsCount + 1,
           });
         }

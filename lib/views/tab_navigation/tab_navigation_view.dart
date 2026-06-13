@@ -14,6 +14,7 @@ import 'package:santvani_app/views/home/home_screen.dart';
 import 'package:santvani_app/views/profile/profile_screen.dart';
 import 'package:santvani_app/views/search/search_screen.dart';
 import 'package:santvani_app/views/chat/chat_screen.dart';
+import 'package:santvani_app/views/reel/reel_screen.dart';
 
 class TabNavigationView extends StatelessWidget {
   const TabNavigationView({
@@ -55,7 +56,7 @@ class TabNavigationView extends StatelessWidget {
     final String? userPhotoUrl = SharedPreferenceHelper().user?.userProfileImageUrl;
     final List<Widget> pages = <Widget>[
       const HomeScreen(),
-      const Center(child: Text('Reels Feed')),
+      const ReelScreen(),
       ChatScreen(sharedPost: cubit.sharedPost),
       const SearchScreen(),
       const ProfileScreen(),

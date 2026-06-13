@@ -21,6 +21,7 @@ class ShareRepoImpl implements ShareRepo {
       final String shareId = shareDoc.id;
 
       final DocumentReference postDoc = FirebaseFirestore.instance.collection('post').doc(postId);
+      final DocumentReference reelDoc = FirebaseFirestore.instance.collection('reels').doc(postId);
 
       final ShareModel share = ShareModel(
         shareId: shareId,
@@ -31,6 +32,7 @@ class ShareRepoImpl implements ShareRepo {
 
       await FirebaseFirestore.instance.runTransaction((final Transaction transaction) async {
         final DocumentSnapshot postSnapshot = await transaction.get(postDoc);
+        final DocumentSnapshot reelSnapshot = await transaction.get(reelDoc);
 
         // Add share document
         transaction.set(shareDoc, share.toJson());
@@ -39,6 +41,11 @@ class ShareRepoImpl implements ShareRepo {
         if (postSnapshot.exists) {
           final int currentSharesCount = (postSnapshot.data() as Map<String, dynamic>?)?['sharesCount'] as int? ?? 0;
           transaction.update(postDoc, <String, dynamic>{
+            'sharesCount': currentSharesCount + 1,
+          });
+        } else if (reelSnapshot.exists) {
+          final int currentSharesCount = (reelSnapshot.data() as Map<String, dynamic>?)?['sharesCount'] as int? ?? 0;
+          transaction.update(reelDoc, <String, dynamic>{
             'sharesCount': currentSharesCount + 1,
           });
         }

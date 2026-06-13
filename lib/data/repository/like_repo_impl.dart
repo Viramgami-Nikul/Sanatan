@@ -21,6 +21,7 @@ class LikeRepoImpl implements LikeRepo {
 
       final DocumentReference likeDoc = FirebaseFirestore.instance.collection('likes').doc(likeId);
       final DocumentReference postDoc = FirebaseFirestore.instance.collection('post').doc(postId);
+      final DocumentReference reelDoc = FirebaseFirestore.instance.collection('reels').doc(postId);
 
       final LikeModel like = LikeModel(
         likeId: likeId,
@@ -31,6 +32,7 @@ class LikeRepoImpl implements LikeRepo {
 
       await FirebaseFirestore.instance.runTransaction((final Transaction transaction) async {
         final DocumentSnapshot postSnapshot = await transaction.get(postDoc);
+        final DocumentSnapshot reelSnapshot = await transaction.get(reelDoc);
 
         if (isLiked) {
           // Add like document
@@ -41,6 +43,11 @@ class LikeRepoImpl implements LikeRepo {
             transaction.update(postDoc, <String, dynamic>{
               'likesCount': currentLikesCount + 1,
             });
+          } else if (reelSnapshot.exists) {
+            final int currentLikesCount = (reelSnapshot.data() as Map<String, dynamic>?)?['likesCount'] as int? ?? 0;
+            transaction.update(reelDoc, <String, dynamic>{
+              'likesCount': currentLikesCount + 1,
+            });
           }
         } else {
           // Delete like document
@@ -49,6 +56,11 @@ class LikeRepoImpl implements LikeRepo {
           if (postSnapshot.exists) {
             final int currentLikesCount = (postSnapshot.data() as Map<String, dynamic>?)?['likesCount'] as int? ?? 0;
             transaction.update(postDoc, <String, dynamic>{
+              'likesCount': currentLikesCount > 0 ? currentLikesCount - 1 : 0,
+            });
+          } else if (reelSnapshot.exists) {
+            final int currentLikesCount = (reelSnapshot.data() as Map<String, dynamic>?)?['likesCount'] as int? ?? 0;
+            transaction.update(reelDoc, <String, dynamic>{
               'likesCount': currentLikesCount > 0 ? currentLikesCount - 1 : 0,
             });
           }

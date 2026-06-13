@@ -121,7 +121,10 @@ dependencies:
 
   audioplayers: ^6.1.0
 
+  video_player: ^2.8.6
+
   vibration: ^2.0.0
+
 
 dev_dependencies:
   flutter_test:
@@ -169,9 +172,9 @@ flutter_launcher_icons:
   image_path: assets/png/sanatan.png
 
 flutter_native_splash:
-  color: "#F8F5F2"
-  image: assets/png/img_splash_logo.png
+  color: "#E65100"
+  image: assets/png/sanatan.png
 
   android_12:
-    image: assets/png/img_android_12_splash_logo.png
-    color: "#F8F5F2"
+    image: assets/png/sanatan.png
+    color: "#E65100"

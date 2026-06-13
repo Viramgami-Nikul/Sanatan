@@ -33,8 +33,11 @@ import 'package:santvani_app/data/repository/chat_repo.dart';
 import 'package:santvani_app/data/repository/chat_repo_impl.dart';
 import 'package:santvani_app/data/repository/category_repo.dart';
 import 'package:santvani_app/data/repository/category_repo_impl.dart';
+import 'package:santvani_app/data/repository/reel_repo.dart';
+import 'package:santvani_app/data/repository/reel_repo_impl.dart';
 import 'package:santvani_app/bloc/chat/chat_bloc.dart';
 import 'package:santvani_app/bloc/category/category_bloc.dart';
+import 'package:santvani_app/bloc/reel/reel_bloc.dart';
 
 List<BlocProvider<StateStreamableSource<Object?>>> getAppProviders() {
   return <BlocProvider<StateStreamableSource<Object?>>>[
@@ -103,6 +106,12 @@ List<BlocProvider<StateStreamableSource<Object?>>> getAppProviders() {
       create: (final BuildContext context) => SettingBloc(
         settingRepo: context.read<SettingRepo>(),
       )..add(SettingEvent.onLoadSettings(userId: FirebaseAuth.instance.currentUser?.uid ?? '')),
+    ),
+
+    BlocProvider<ReelBloc>(
+      create: (final BuildContext context) => ReelBloc(
+        reelRepo: context.read<ReelRepo>(),
+      )..add(const ReelEvent.fetchReels()),
     ),
   ];
 }
@@ -184,6 +193,10 @@ List<RepositoryProvider<dynamic>> getRepoProviders() {
     // ------------------------------------------------------------------------
     RepositoryProvider<CategoryRepo>(
       create: (final BuildContext context) => CategoryRepoImpl(),
+    ),
+
+    RepositoryProvider<ReelRepo>(
+      create: (final BuildContext context) => ReelRepoImpl(),
     ),
   ];
 }
