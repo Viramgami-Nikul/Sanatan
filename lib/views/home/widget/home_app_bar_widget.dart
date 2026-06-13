@@ -1,9 +1,61 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:video_player/video_player.dart';
+import 'package:santvani_app/bloc/reel/reel_bloc.dart';
 import 'package:santvani_app/components/bottom_sheet/create_options_bottom_sheet.dart';
+import 'package:santvani_app/utils/app_enums.dart';
+import 'package:santvani_app/utils/utils.dart';
+import 'package:santvani_app/views/reel/widget/create_reel_sheet.dart';
 
 class HomeAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   const HomeAppBarWidget({super.key});
+
+  Future<void> _pickAndUploadReel(final BuildContext context) async {
+    final PermissionStatus status = await Utils.checkPhotosPermission(context);
+    if (status.isGranted || status.isLimited) {
+      final XFile? media = await Utils.pickVideo(PhotoPickerType.photos);
+      if (media != null && context.mounted) {
+        final VideoPlayerController tempController = VideoPlayerController.file(File(media.path));
+        try {
+          await tempController.initialize();
+          final Duration duration = tempController.value.duration;
+          await tempController.dispose();
+
+          if (duration.inSeconds > 20) {
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  backgroundColor: Color(0xFFD32F2F),
+                  content: Text('Video duration must be under 20 seconds! 🌸'),
+                ),
+              );
+            }
+            return;
+          }
+        } catch (e) {
+          debugPrint('Error checking video duration: $e');
+        }
+
+        context.read<ReelBloc>().add(ReelEvent.onSelectVideo(videoPath: media.path));
+        showModalBottomSheet<void>(
+          context: context,
+          backgroundColor: Colors.transparent,
+          isScrollControlled: true,
+          useRootNavigator: true,
+          builder: (final BuildContext sheetContext) {
+            return BlocProvider.value(
+              value: context.read<ReelBloc>(),
+              child: const CreateReelSheet(),
+            );
+          },
+        );
+      }
+    }
+  }
 
   @override
   Widget build(final BuildContext context) {
@@ -42,7 +94,9 @@ class HomeAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                   backgroundColor: Colors.transparent,
                   useRootNavigator: true,
                   isScrollControlled: true,
-                  builder: (final BuildContext ccontext) => const CreateOptionsBottomSheet(),
+                  builder: (final BuildContext ccontext) => CreateOptionsBottomSheet(
+                    onTapReel: () => _pickAndUploadReel(context),
+                  ),
                 );
               },
               child: const Icon(
