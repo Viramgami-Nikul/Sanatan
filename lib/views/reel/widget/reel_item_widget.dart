@@ -4,8 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
 import 'package:santvani_app/bloc/like/like_bloc.dart';
 import 'package:santvani_app/bloc/share/share_bloc.dart';
+import 'package:santvani_app/bloc/save/save_bloc.dart';
 import 'package:santvani_app/data/repository/like_repo.dart';
 import 'package:santvani_app/data/repository/share_repo.dart';
+import 'package:santvani_app/data/repository/save_repo.dart';
 import 'package:santvani_app/data/models/reel/reel_model.dart';
 import 'package:santvani_app/theme/font_styles.dart';
 import 'package:santvani_app/utils/app_enums.dart';
@@ -29,6 +31,7 @@ class _ReelItemWidgetState extends State<ReelItemWidget> {
   bool _isPlaying = true;
   bool _showPlayPauseOverlay = false;
   bool _isLiked = false;
+  bool _isBookmarked = false;
   late int _likesCount;
 
   @override
@@ -95,6 +98,14 @@ class _ReelItemWidgetState extends State<ReelItemWidget> {
     ctx.read<LikeBloc>().add(LikeEvent.onToggleLike(postId: widget.reel.reelId, isLiked: newLikedState));
   }
 
+  void _toggleSave(final BuildContext ctx) {
+    final bool newSavedState = !_isBookmarked;
+    setState(() {
+      _isBookmarked = newSavedState;
+    });
+    ctx.read<SaveBloc>().add(SaveEvent.onToggleSave(postId: widget.reel.reelId, isSaved: newSavedState));
+  }
+
   Future<Map<String, dynamic>?> _getUserData() async {
     final DocumentSnapshot doc = await FirebaseFirestore.instance
         .collection('users')
@@ -114,6 +125,10 @@ class _ReelItemWidgetState extends State<ReelItemWidget> {
         BlocProvider<ShareBloc>(
           create: (final BuildContext ctx) => ShareBloc(shareRepo: ctx.read<ShareRepo>()),
         ),
+        BlocProvider<SaveBloc>(
+          create: (final BuildContext ctx) => SaveBloc(saveRepo: ctx.read<SaveRepo>())
+            ..add(SaveEvent.onCheckSaveStatus(postId: widget.reel.reelId)),
+        ),
       ],
       child: MultiBlocListener(
         listeners: <BlocListener<dynamic, dynamic>>[
@@ -122,6 +137,15 @@ class _ReelItemWidgetState extends State<ReelItemWidget> {
               if (state.status == CommonScreenState.success && state.errorMessage == null) {
                 setState(() {
                   _isLiked = state.isLiked;
+                });
+              }
+            },
+          ),
+          BlocListener<SaveBloc, SaveState>(
+            listener: (final BuildContext ctx, final SaveState state) {
+              if (state.status == CommonScreenState.success && state.errorMessage == null) {
+                setState(() {
+                  _isBookmarked = state.isSaved;
                 });
               }
             },
@@ -333,6 +357,17 @@ class _ReelItemWidgetState extends State<ReelItemWidget> {
                         onPressed: () {
                           ctx.read<ShareBloc>().add(ShareEvent.onSharePost(postId: widget.reel.reelId));
                         },
+                      ),
+                      const SizedBox(height: 20),
+
+                      // Save/Bookmark Action
+                      IconButton(
+                        icon: Icon(
+                          _isBookmarked ? Icons.bookmark_rounded : Icons.bookmark_border_rounded,
+                          color: _isBookmarked ? const Color(0xFFFF9933) : Colors.white,
+                          size: 28,
+                        ),
+                        onPressed: () => _toggleSave(ctx),
                       ),
                       const SizedBox(height: 10),
                     ],

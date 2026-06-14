@@ -10,6 +10,8 @@ import 'package:santvani_app/theme/font_styles.dart';
 import 'package:santvani_app/utils/app_enums.dart';
 import 'package:santvani_app/views/home/widget/home_post_widget.dart';
 import 'package:santvani_app/views/post/post_detail_screen.dart';
+import 'package:santvani_app/data/models/reel/reel_model.dart';
+import 'package:santvani_app/views/reel/widget/reel_item_widget.dart';
 
 class SavedPostsScreen extends StatefulWidget {
   const SavedPostsScreen({super.key});
@@ -95,8 +97,47 @@ class _SavedPostsScreenState extends State<SavedPostsScreen> {
       itemCount: items.length,
       itemBuilder: (final _, final int i) {
         final PostData post = items[i];
+        final bool isReel = post.caption.toLowerCase().contains('reel');
+
         return GestureDetector(
-          onTap: () => Navigator.push(context, MaterialPageRoute<void>(builder: (final _) => PostDetailScreen(post: post))),
+          onTap: () {
+            if (isReel) {
+              final ReelModel reelModel = ReelModel(
+                reelId: post.id,
+                uid: post.uid ?? '',
+                videoUrl: post.postImageUrl,
+                caption: post.caption,
+                likesCount: post.initialLikesCount,
+                commentsCount: post.commentsCount,
+                createdAt: null,
+              );
+              Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (final BuildContext routeContext) => Scaffold(
+                    backgroundColor: Colors.black,
+                    appBar: AppBar(
+                      backgroundColor: Colors.transparent,
+                      elevation: 0,
+                      leading: IconButton(
+                        icon: const Icon(Icons.arrow_back, color: Colors.white),
+                        onPressed: () => Navigator.pop(routeContext),
+                      ),
+                    ),
+                    extendBodyBehindAppBar: true,
+                    body: ReelItemWidget(reel: reelModel),
+                  ),
+                ),
+              );
+            } else {
+              Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (final _) => PostDetailScreen(post: post),
+                ),
+              );
+            }
+          },
           child: Container(
             decoration: BoxDecoration(
               color: const Color(0xFFFFFDF6),
@@ -105,9 +146,28 @@ class _SavedPostsScreenState extends State<SavedPostsScreen> {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: post.postImageUrl.isNotEmpty
-                  ? Image.network(post.postImageUrl, fit: BoxFit.cover)
-                  : Container(color: const Color(0xFFFFF3E0), child: const Center(child: Icon(Icons.image_outlined, color: Color(0xFFFFB300)))),
+              child: isReel
+                  ? Container(
+                      color: const Color(0xFFFFF3E0),
+                      child: const Center(
+                        child: Icon(
+                          Icons.play_circle_outline_rounded,
+                          color: Color(0xFFFFB300),
+                          size: 40,
+                        ),
+                      ),
+                    )
+                  : post.postImageUrl.isNotEmpty
+                      ? Image.network(post.postImageUrl, fit: BoxFit.cover)
+                      : Container(
+                          color: const Color(0xFFFFF3E0),
+                          child: const Center(
+                            child: Icon(
+                              Icons.image_outlined,
+                              color: Color(0xFFFFB300),
+                            ),
+                          ),
+                        ),
             ),
           ),
         );

@@ -18,11 +18,58 @@ import 'package:santvani_app/views/profile/widget/profile_bio_widget.dart';
 import 'package:santvani_app/views/profile/widget/profile_actions_widget.dart';
 import 'package:santvani_app/views/profile/widget/profile_post_grid_widget.dart';
 
+import 'dart:io';
+import 'package:video_player/video_player.dart';
+import 'package:santvani_app/bloc/reel/reel_bloc.dart';
+import 'package:santvani_app/views/reel/widget/create_reel_sheet.dart';
 import 'package:santvani_app/components/bottom_sheet/create_options_bottom_sheet.dart';
 import 'package:santvani_app/routes/routes_name.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
+
+  Future<void> _pickAndUploadReel(final BuildContext context) async {
+    final PermissionStatus status = await Utils.checkPhotosPermission(context);
+    if (status.isGranted || status.isLimited) {
+      final XFile? media = await Utils.pickVideo(PhotoPickerType.photos);
+      if (media != null && context.mounted) {
+        final VideoPlayerController tempController = VideoPlayerController.file(File(media.path));
+        try {
+          await tempController.initialize();
+          final Duration duration = tempController.value.duration;
+          await tempController.dispose();
+
+          if (duration.inSeconds > 20) {
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  backgroundColor: Color(0xFFD32F2F),
+                  content: Text('Video duration must be under 20 seconds! 🌸'),
+                ),
+              );
+            }
+            return;
+          }
+        } catch (e) {
+          debugPrint('Error checking video duration: $e');
+        }
+
+        context.read<ReelBloc>().add(ReelEvent.onSelectVideo(videoPath: media.path));
+        showModalBottomSheet<void>(
+          context: context,
+          backgroundColor: Colors.transparent,
+          isScrollControlled: true,
+          useRootNavigator: true,
+          builder: (final BuildContext sheetContext) {
+            return BlocProvider.value(
+              value: context.read<ReelBloc>(),
+              child: const CreateReelSheet(),
+            );
+          },
+        );
+      }
+    }
+  }
 
   @override
   Widget build(final BuildContext buildContext) {
@@ -148,7 +195,9 @@ class ProfileScreen extends StatelessWidget {
                                 backgroundColor: Colors.transparent,
                                 useRootNavigator: true,
                                 isScrollControlled: true,
-                                builder: (final BuildContext ccontext) => const CreateOptionsBottomSheet(),
+                                builder: (final BuildContext ccontext) => CreateOptionsBottomSheet(
+                                  onTapReel: () => _pickAndUploadReel(context),
+                                ),
                               );
                             },
                             child: const Icon(

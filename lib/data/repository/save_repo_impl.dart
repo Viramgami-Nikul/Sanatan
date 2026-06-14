@@ -78,9 +78,42 @@ class SaveRepoImpl implements SaveRepo {
 
       final List<DocumentSnapshot> postSnapshots = await Future.wait(futures);
 
-      for (final DocumentSnapshot snap in postSnapshots) {
+      final List<String> missingPostIds = [];
+      for (int i = 0; i < postSnapshots.length; i++) {
+        final DocumentSnapshot snap = postSnapshots[i];
         if (snap.exists) {
           posts.add(PostModel.fromJson(snap.data() as Map<String, dynamic>));
+        } else {
+          missingPostIds.add(postIds[i]);
+        }
+      }
+
+      if (missingPostIds.isNotEmpty) {
+        final List<Future<DocumentSnapshot>> reelFutures = missingPostIds.map((final id) {
+          return FirebaseFirestore.instance.collection('reels').doc(id).get();
+        }).toList();
+
+        final List<DocumentSnapshot> reelSnapshots = await Future.wait(reelFutures);
+
+        for (final DocumentSnapshot snap in reelSnapshots) {
+          if (snap.exists) {
+            final Map<String, dynamic> data = snap.data() as Map<String, dynamic>;
+            String caption = data['caption'] ?? '';
+            if (!caption.toLowerCase().contains('reel')) {
+              caption = '$caption #reel';
+            }
+            final Map<String, dynamic> mappedData = {
+              'postId': data['reelId'] ?? snap.id,
+              'uid': data['uid'] ?? '',
+              'imageUrl': data['videoUrl'] ?? '',
+              'caption': caption,
+              'likesCount': data['likesCount'] ?? 0,
+              'commentsCount': data['commentsCount'] ?? 0,
+              'createdAt': data['createdAt'],
+              'category': data['category'],
+            };
+            posts.add(PostModel.fromJson(mappedData));
+          }
         }
       }
 
