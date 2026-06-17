@@ -31,6 +31,8 @@ class _HomeScreenState extends State<HomeScreen> {
   List<UserDataModel> _followedUsers = <UserDataModel>[];
   List<PostData> _feedPosts = <PostData>[];
   bool _isLoading = true;
+  Future<List<PostData>>? _categoryPostsFuture;
+  List<PostModel>? _cachedCategoryPosts;
 
   static final List<PostData> _mockPosts = <PostData>[
     const PostData(
@@ -205,27 +207,33 @@ class _HomeScreenState extends State<HomeScreen> {
     final List<PostData> result = <PostData>[];
     final Map<String, UserDataModel> userCache = <String, UserDataModel>{};
     for (final PostModel post in posts) {
-      UserDataModel? user = userCache[post.uid];
-      if (user == null) {
-        final DocumentSnapshot doc = await FirebaseFirestore.instance.collection('users').doc(post.uid).get();
-        if (doc.exists) {
-          user = UserDataModel.fromJson(doc.data() as Map<String, dynamic>);
-          userCache[post.uid] = user;
+      try {
+        UserDataModel? user = userCache[post.uid];
+        if (user == null) {
+          final DocumentSnapshot doc = await FirebaseFirestore.instance.collection('users').doc(post.uid).get();
+          if (doc.exists) {
+            final Map<String, dynamic> data = Map<String, dynamic>.from(doc.data() as Map<String, dynamic>);
+            data['full_name'] ??= data['name'] ?? 'Viramgami Nikul';
+            userCache[post.uid] = UserDataModel.fromJson(data);
+          }
         }
-      }
-      if (user != null) {
-        result.add(PostData(
-          id: post.postId,
-          username: user.username ?? user.fullName,
-          userAvatarUrl: user.profileImage ?? user.photoUrl ?? 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80',
-          postImageUrl: post.imageUrl,
-          isVerified: user.isVerified ?? false,
-          initialLikesCount: post.likesCount,
-          caption: post.caption,
-          timeAgo: _getTimeAgo(post.createdAt),
-          commentsCount: post.commentsCount,
-          uid: post.uid,
-        ));
+        user = userCache[post.uid];
+        if (user != null) {
+          result.add(PostData(
+            id: post.postId,
+            username: user.username ?? user.fullName,
+            userAvatarUrl: user.profileImage ?? user.photoUrl ?? 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80',
+            postImageUrl: post.imageUrl,
+            isVerified: user.isVerified ?? false,
+            initialLikesCount: post.likesCount,
+            caption: post.caption,
+            timeAgo: _getTimeAgo(post.createdAt),
+            commentsCount: post.commentsCount,
+            uid: post.uid,
+          ));
+        }
+      } catch (e) {
+        debugPrint('Error mapping post ${post.postId}: $e');
       }
     }
     return result;
@@ -311,9 +319,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                       );
                                     }
 
+                                    if (_cachedCategoryPosts != categoryState.posts) {
+                                      _cachedCategoryPosts = categoryState.posts;
+                                      _categoryPostsFuture = _mapPostsToPostData(categoryState.posts);
+                                    }
+
                                     return FutureBuilder<List<PostData>>(
-                                      future: _mapPostsToPostData(categoryState.posts),
+                                      future: _categoryPostsFuture,
                                       builder: (final BuildContext context, final AsyncSnapshot<List<PostData>> snapshot) {
+                                        if (snapshot.hasError) {
+                                          return Center(
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(vertical: 40),
+                                              child: Text(
+                                                'Error: ${snapshot.error}',
+                                                style: const TextStyle(color: Colors.redAccent),
+                                              ),
+                                            ),
+                                          );
+                                        }
                                         if (!snapshot.hasData) {
                                           return const Center(
                                             child: Padding(

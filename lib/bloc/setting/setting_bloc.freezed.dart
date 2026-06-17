@@ -55,14 +55,18 @@ extension SettingEventPatterns on SettingEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( OnLoadSettings value)?  onLoadSettings,TResult Function( OnToggleNotifications value)?  onToggleNotifications,TResult Function( OnToggleDarkMode value)?  onToggleDarkMode,TResult Function( OnChangeLanguage value)?  onChangeLanguage,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( OnLoadSettings value)?  onLoadSettings,TResult Function( OnToggleNotifications value)?  onToggleNotifications,TResult Function( OnToggleDarkMode value)?  onToggleDarkMode,TResult Function( OnChangeLanguage value)?  onChangeLanguage,TResult Function( OnUpdateFollowerRequests value)?  onUpdateFollowerRequests,TResult Function( OnUpdateAcceptedFollowRequests value)?  onUpdateAcceptedFollowRequests,TResult Function( OnUpdateAccountSuggestions value)?  onUpdateAccountSuggestions,TResult Function( OnUpdateMentionsInBio value)?  onUpdateMentionsInBio,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case OnLoadSettings() when onLoadSettings != null:
 return onLoadSettings(_that);case OnToggleNotifications() when onToggleNotifications != null:
 return onToggleNotifications(_that);case OnToggleDarkMode() when onToggleDarkMode != null:
 return onToggleDarkMode(_that);case OnChangeLanguage() when onChangeLanguage != null:
-return onChangeLanguage(_that);case _:
+return onChangeLanguage(_that);case OnUpdateFollowerRequests() when onUpdateFollowerRequests != null:
+return onUpdateFollowerRequests(_that);case OnUpdateAcceptedFollowRequests() when onUpdateAcceptedFollowRequests != null:
+return onUpdateAcceptedFollowRequests(_that);case OnUpdateAccountSuggestions() when onUpdateAccountSuggestions != null:
+return onUpdateAccountSuggestions(_that);case OnUpdateMentionsInBio() when onUpdateMentionsInBio != null:
+return onUpdateMentionsInBio(_that);case _:
   return orElse();
 
 }
@@ -80,14 +84,18 @@ return onChangeLanguage(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( OnLoadSettings value)  onLoadSettings,required TResult Function( OnToggleNotifications value)  onToggleNotifications,required TResult Function( OnToggleDarkMode value)  onToggleDarkMode,required TResult Function( OnChangeLanguage value)  onChangeLanguage,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( OnLoadSettings value)  onLoadSettings,required TResult Function( OnToggleNotifications value)  onToggleNotifications,required TResult Function( OnToggleDarkMode value)  onToggleDarkMode,required TResult Function( OnChangeLanguage value)  onChangeLanguage,required TResult Function( OnUpdateFollowerRequests value)  onUpdateFollowerRequests,required TResult Function( OnUpdateAcceptedFollowRequests value)  onUpdateAcceptedFollowRequests,required TResult Function( OnUpdateAccountSuggestions value)  onUpdateAccountSuggestions,required TResult Function( OnUpdateMentionsInBio value)  onUpdateMentionsInBio,}){
 final _that = this;
 switch (_that) {
 case OnLoadSettings():
 return onLoadSettings(_that);case OnToggleNotifications():
 return onToggleNotifications(_that);case OnToggleDarkMode():
 return onToggleDarkMode(_that);case OnChangeLanguage():
-return onChangeLanguage(_that);case _:
+return onChangeLanguage(_that);case OnUpdateFollowerRequests():
+return onUpdateFollowerRequests(_that);case OnUpdateAcceptedFollowRequests():
+return onUpdateAcceptedFollowRequests(_that);case OnUpdateAccountSuggestions():
+return onUpdateAccountSuggestions(_that);case OnUpdateMentionsInBio():
+return onUpdateMentionsInBio(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -104,14 +112,18 @@ return onChangeLanguage(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( OnLoadSettings value)?  onLoadSettings,TResult? Function( OnToggleNotifications value)?  onToggleNotifications,TResult? Function( OnToggleDarkMode value)?  onToggleDarkMode,TResult? Function( OnChangeLanguage value)?  onChangeLanguage,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( OnLoadSettings value)?  onLoadSettings,TResult? Function( OnToggleNotifications value)?  onToggleNotifications,TResult? Function( OnToggleDarkMode value)?  onToggleDarkMode,TResult? Function( OnChangeLanguage value)?  onChangeLanguage,TResult? Function( OnUpdateFollowerRequests value)?  onUpdateFollowerRequests,TResult? Function( OnUpdateAcceptedFollowRequests value)?  onUpdateAcceptedFollowRequests,TResult? Function( OnUpdateAccountSuggestions value)?  onUpdateAccountSuggestions,TResult? Function( OnUpdateMentionsInBio value)?  onUpdateMentionsInBio,}){
 final _that = this;
 switch (_that) {
 case OnLoadSettings() when onLoadSettings != null:
 return onLoadSettings(_that);case OnToggleNotifications() when onToggleNotifications != null:
 return onToggleNotifications(_that);case OnToggleDarkMode() when onToggleDarkMode != null:
 return onToggleDarkMode(_that);case OnChangeLanguage() when onChangeLanguage != null:
-return onChangeLanguage(_that);case _:
+return onChangeLanguage(_that);case OnUpdateFollowerRequests() when onUpdateFollowerRequests != null:
+return onUpdateFollowerRequests(_that);case OnUpdateAcceptedFollowRequests() when onUpdateAcceptedFollowRequests != null:
+return onUpdateAcceptedFollowRequests(_that);case OnUpdateAccountSuggestions() when onUpdateAccountSuggestions != null:
+return onUpdateAccountSuggestions(_that);case OnUpdateMentionsInBio() when onUpdateMentionsInBio != null:
+return onUpdateMentionsInBio(_that);case _:
   return null;
 
 }
@@ -128,13 +140,17 @@ return onChangeLanguage(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String userId)?  onLoadSettings,TResult Function( bool isEnabled)?  onToggleNotifications,TResult Function( bool isEnabled)?  onToggleDarkMode,TResult Function( String language)?  onChangeLanguage,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String userId)?  onLoadSettings,TResult Function( bool isEnabled)?  onToggleNotifications,TResult Function( bool isEnabled)?  onToggleDarkMode,TResult Function( String language)?  onChangeLanguage,TResult Function( String value)?  onUpdateFollowerRequests,TResult Function( String value)?  onUpdateAcceptedFollowRequests,TResult Function( String value)?  onUpdateAccountSuggestions,TResult Function( String value)?  onUpdateMentionsInBio,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case OnLoadSettings() when onLoadSettings != null:
 return onLoadSettings(_that.userId);case OnToggleNotifications() when onToggleNotifications != null:
 return onToggleNotifications(_that.isEnabled);case OnToggleDarkMode() when onToggleDarkMode != null:
 return onToggleDarkMode(_that.isEnabled);case OnChangeLanguage() when onChangeLanguage != null:
-return onChangeLanguage(_that.language);case _:
+return onChangeLanguage(_that.language);case OnUpdateFollowerRequests() when onUpdateFollowerRequests != null:
+return onUpdateFollowerRequests(_that.value);case OnUpdateAcceptedFollowRequests() when onUpdateAcceptedFollowRequests != null:
+return onUpdateAcceptedFollowRequests(_that.value);case OnUpdateAccountSuggestions() when onUpdateAccountSuggestions != null:
+return onUpdateAccountSuggestions(_that.value);case OnUpdateMentionsInBio() when onUpdateMentionsInBio != null:
+return onUpdateMentionsInBio(_that.value);case _:
   return orElse();
 
 }
@@ -152,13 +168,17 @@ return onChangeLanguage(_that.language);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String userId)  onLoadSettings,required TResult Function( bool isEnabled)  onToggleNotifications,required TResult Function( bool isEnabled)  onToggleDarkMode,required TResult Function( String language)  onChangeLanguage,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String userId)  onLoadSettings,required TResult Function( bool isEnabled)  onToggleNotifications,required TResult Function( bool isEnabled)  onToggleDarkMode,required TResult Function( String language)  onChangeLanguage,required TResult Function( String value)  onUpdateFollowerRequests,required TResult Function( String value)  onUpdateAcceptedFollowRequests,required TResult Function( String value)  onUpdateAccountSuggestions,required TResult Function( String value)  onUpdateMentionsInBio,}) {final _that = this;
 switch (_that) {
 case OnLoadSettings():
 return onLoadSettings(_that.userId);case OnToggleNotifications():
 return onToggleNotifications(_that.isEnabled);case OnToggleDarkMode():
 return onToggleDarkMode(_that.isEnabled);case OnChangeLanguage():
-return onChangeLanguage(_that.language);case _:
+return onChangeLanguage(_that.language);case OnUpdateFollowerRequests():
+return onUpdateFollowerRequests(_that.value);case OnUpdateAcceptedFollowRequests():
+return onUpdateAcceptedFollowRequests(_that.value);case OnUpdateAccountSuggestions():
+return onUpdateAccountSuggestions(_that.value);case OnUpdateMentionsInBio():
+return onUpdateMentionsInBio(_that.value);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -175,13 +195,17 @@ return onChangeLanguage(_that.language);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String userId)?  onLoadSettings,TResult? Function( bool isEnabled)?  onToggleNotifications,TResult? Function( bool isEnabled)?  onToggleDarkMode,TResult? Function( String language)?  onChangeLanguage,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String userId)?  onLoadSettings,TResult? Function( bool isEnabled)?  onToggleNotifications,TResult? Function( bool isEnabled)?  onToggleDarkMode,TResult? Function( String language)?  onChangeLanguage,TResult? Function( String value)?  onUpdateFollowerRequests,TResult? Function( String value)?  onUpdateAcceptedFollowRequests,TResult? Function( String value)?  onUpdateAccountSuggestions,TResult? Function( String value)?  onUpdateMentionsInBio,}) {final _that = this;
 switch (_that) {
 case OnLoadSettings() when onLoadSettings != null:
 return onLoadSettings(_that.userId);case OnToggleNotifications() when onToggleNotifications != null:
 return onToggleNotifications(_that.isEnabled);case OnToggleDarkMode() when onToggleDarkMode != null:
 return onToggleDarkMode(_that.isEnabled);case OnChangeLanguage() when onChangeLanguage != null:
-return onChangeLanguage(_that.language);case _:
+return onChangeLanguage(_that.language);case OnUpdateFollowerRequests() when onUpdateFollowerRequests != null:
+return onUpdateFollowerRequests(_that.value);case OnUpdateAcceptedFollowRequests() when onUpdateAcceptedFollowRequests != null:
+return onUpdateAcceptedFollowRequests(_that.value);case OnUpdateAccountSuggestions() when onUpdateAccountSuggestions != null:
+return onUpdateAccountSuggestions(_that.value);case OnUpdateMentionsInBio() when onUpdateMentionsInBio != null:
+return onUpdateMentionsInBio(_that.value);case _:
   return null;
 
 }
@@ -446,6 +470,270 @@ class _$OnChangeLanguageCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') $Res call({Object? language = null,}) {
   return _then(OnChangeLanguage(
 language: null == language ? _self.language : language // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class OnUpdateFollowerRequests implements SettingEvent {
+  const OnUpdateFollowerRequests({required this.value});
+  
+
+ final  String value;
+
+/// Create a copy of SettingEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$OnUpdateFollowerRequestsCopyWith<OnUpdateFollowerRequests> get copyWith => _$OnUpdateFollowerRequestsCopyWithImpl<OnUpdateFollowerRequests>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OnUpdateFollowerRequests&&(identical(other.value, value) || other.value == value));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,value);
+
+@override
+String toString() {
+  return 'SettingEvent.onUpdateFollowerRequests(value: $value)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $OnUpdateFollowerRequestsCopyWith<$Res> implements $SettingEventCopyWith<$Res> {
+  factory $OnUpdateFollowerRequestsCopyWith(OnUpdateFollowerRequests value, $Res Function(OnUpdateFollowerRequests) _then) = _$OnUpdateFollowerRequestsCopyWithImpl;
+@useResult
+$Res call({
+ String value
+});
+
+
+
+
+}
+/// @nodoc
+class _$OnUpdateFollowerRequestsCopyWithImpl<$Res>
+    implements $OnUpdateFollowerRequestsCopyWith<$Res> {
+  _$OnUpdateFollowerRequestsCopyWithImpl(this._self, this._then);
+
+  final OnUpdateFollowerRequests _self;
+  final $Res Function(OnUpdateFollowerRequests) _then;
+
+/// Create a copy of SettingEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? value = null,}) {
+  return _then(OnUpdateFollowerRequests(
+value: null == value ? _self.value : value // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class OnUpdateAcceptedFollowRequests implements SettingEvent {
+  const OnUpdateAcceptedFollowRequests({required this.value});
+  
+
+ final  String value;
+
+/// Create a copy of SettingEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$OnUpdateAcceptedFollowRequestsCopyWith<OnUpdateAcceptedFollowRequests> get copyWith => _$OnUpdateAcceptedFollowRequestsCopyWithImpl<OnUpdateAcceptedFollowRequests>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OnUpdateAcceptedFollowRequests&&(identical(other.value, value) || other.value == value));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,value);
+
+@override
+String toString() {
+  return 'SettingEvent.onUpdateAcceptedFollowRequests(value: $value)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $OnUpdateAcceptedFollowRequestsCopyWith<$Res> implements $SettingEventCopyWith<$Res> {
+  factory $OnUpdateAcceptedFollowRequestsCopyWith(OnUpdateAcceptedFollowRequests value, $Res Function(OnUpdateAcceptedFollowRequests) _then) = _$OnUpdateAcceptedFollowRequestsCopyWithImpl;
+@useResult
+$Res call({
+ String value
+});
+
+
+
+
+}
+/// @nodoc
+class _$OnUpdateAcceptedFollowRequestsCopyWithImpl<$Res>
+    implements $OnUpdateAcceptedFollowRequestsCopyWith<$Res> {
+  _$OnUpdateAcceptedFollowRequestsCopyWithImpl(this._self, this._then);
+
+  final OnUpdateAcceptedFollowRequests _self;
+  final $Res Function(OnUpdateAcceptedFollowRequests) _then;
+
+/// Create a copy of SettingEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? value = null,}) {
+  return _then(OnUpdateAcceptedFollowRequests(
+value: null == value ? _self.value : value // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class OnUpdateAccountSuggestions implements SettingEvent {
+  const OnUpdateAccountSuggestions({required this.value});
+  
+
+ final  String value;
+
+/// Create a copy of SettingEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$OnUpdateAccountSuggestionsCopyWith<OnUpdateAccountSuggestions> get copyWith => _$OnUpdateAccountSuggestionsCopyWithImpl<OnUpdateAccountSuggestions>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OnUpdateAccountSuggestions&&(identical(other.value, value) || other.value == value));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,value);
+
+@override
+String toString() {
+  return 'SettingEvent.onUpdateAccountSuggestions(value: $value)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $OnUpdateAccountSuggestionsCopyWith<$Res> implements $SettingEventCopyWith<$Res> {
+  factory $OnUpdateAccountSuggestionsCopyWith(OnUpdateAccountSuggestions value, $Res Function(OnUpdateAccountSuggestions) _then) = _$OnUpdateAccountSuggestionsCopyWithImpl;
+@useResult
+$Res call({
+ String value
+});
+
+
+
+
+}
+/// @nodoc
+class _$OnUpdateAccountSuggestionsCopyWithImpl<$Res>
+    implements $OnUpdateAccountSuggestionsCopyWith<$Res> {
+  _$OnUpdateAccountSuggestionsCopyWithImpl(this._self, this._then);
+
+  final OnUpdateAccountSuggestions _self;
+  final $Res Function(OnUpdateAccountSuggestions) _then;
+
+/// Create a copy of SettingEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? value = null,}) {
+  return _then(OnUpdateAccountSuggestions(
+value: null == value ? _self.value : value // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class OnUpdateMentionsInBio implements SettingEvent {
+  const OnUpdateMentionsInBio({required this.value});
+  
+
+ final  String value;
+
+/// Create a copy of SettingEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$OnUpdateMentionsInBioCopyWith<OnUpdateMentionsInBio> get copyWith => _$OnUpdateMentionsInBioCopyWithImpl<OnUpdateMentionsInBio>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OnUpdateMentionsInBio&&(identical(other.value, value) || other.value == value));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,value);
+
+@override
+String toString() {
+  return 'SettingEvent.onUpdateMentionsInBio(value: $value)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $OnUpdateMentionsInBioCopyWith<$Res> implements $SettingEventCopyWith<$Res> {
+  factory $OnUpdateMentionsInBioCopyWith(OnUpdateMentionsInBio value, $Res Function(OnUpdateMentionsInBio) _then) = _$OnUpdateMentionsInBioCopyWithImpl;
+@useResult
+$Res call({
+ String value
+});
+
+
+
+
+}
+/// @nodoc
+class _$OnUpdateMentionsInBioCopyWithImpl<$Res>
+    implements $OnUpdateMentionsInBioCopyWith<$Res> {
+  _$OnUpdateMentionsInBioCopyWithImpl(this._self, this._then);
+
+  final OnUpdateMentionsInBio _self;
+  final $Res Function(OnUpdateMentionsInBio) _then;
+
+/// Create a copy of SettingEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? value = null,}) {
+  return _then(OnUpdateMentionsInBio(
+value: null == value ? _self.value : value // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

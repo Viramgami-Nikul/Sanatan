@@ -115,5 +115,109 @@ class SettingBloc extends Bloc<SettingEvent, SettingState> {
         },
       );
     });
+
+    on<OnUpdateFollowerRequests>((
+      final OnUpdateFollowerRequests event,
+      final Emitter<SettingState> emit,
+    ) async {
+      if (state.settings == null) return;
+      final SettingModel updated = state.settings!.copyWith(followerRequests: event.value);
+      emit(state.copyWith(status: CommonScreenState.loading, settings: updated));
+
+      final Either<Failure, SettingModel> result = await settingRepo.updateSettings(setting: updated);
+
+      result.fold(
+        (final Failure failure) {
+          emit(state.copyWith(
+            status: CommonScreenState.error,
+            errorMessage: failure.message,
+          ));
+        },
+        (final SettingModel settings) {
+          emit(state.copyWith(
+            status: CommonScreenState.success,
+            settings: settings,
+          ));
+        },
+      );
+    });
+
+    on<OnUpdateAcceptedFollowRequests>((
+      final OnUpdateAcceptedFollowRequests event,
+      final Emitter<SettingState> emit,
+    ) async {
+      if (state.settings == null) return;
+      final SettingModel updated = state.settings!.copyWith(acceptedFollowRequests: event.value);
+      emit(state.copyWith(status: CommonScreenState.loading, settings: updated));
+
+      final Either<Failure, SettingModel> result = await settingRepo.updateSettings(setting: updated);
+
+      result.fold(
+        (final Failure failure) {
+          emit(state.copyWith(
+            status: CommonScreenState.error,
+            errorMessage: failure.message,
+          ));
+        },
+        (final SettingModel settings) {
+          emit(state.copyWith(
+            status: CommonScreenState.success,
+            settings: settings,
+          ));
+        },
+      );
+    });
+
+    on<OnUpdateAccountSuggestions>((
+      final OnUpdateAccountSuggestions event,
+      final Emitter<SettingState> emit,
+    ) async {
+      if (state.settings == null) return;
+      final SettingModel updated = state.settings!.copyWith(accountSuggestions: event.value);
+      emit(state.copyWith(status: CommonScreenState.loading, settings: updated));
+
+      final Either<Failure, SettingModel> result = await settingRepo.updateSettings(setting: updated);
+
+      result.fold(
+        (final Failure failure) {
+          emit(state.copyWith(
+            status: CommonScreenState.error,
+            errorMessage: failure.message,
+          ));
+        },
+        (final SettingModel settings) {
+          emit(state.copyWith(
+            status: CommonScreenState.success,
+            settings: settings,
+          ));
+        },
+      );
+    });
+
+    on<OnUpdateMentionsInBio>((
+      final OnUpdateMentionsInBio event,
+      final Emitter<SettingState> emit,
+    ) async {
+      if (state.settings == null) return;
+      final SettingModel updated = state.settings!.copyWith(mentionsInBio: event.value);
+      emit(state.copyWith(status: CommonScreenState.loading, settings: updated));
+
+      final Either<Failure, SettingModel> result = await settingRepo.updateSettings(setting: updated);
+
+      result.fold(
+        (final Failure failure) {
+          emit(state.copyWith(
+            status: CommonScreenState.error,
+            errorMessage: failure.message,
+          ));
+        },
+        (final SettingModel settings) {
+          emit(state.copyWith(
+            status: CommonScreenState.success,
+            settings: settings,
+          ));
+        },
+      );
+    });
   }
 }

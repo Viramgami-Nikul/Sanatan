@@ -3,6 +3,10 @@ class SettingModel {
   final bool isNotificationsEnabled;
   final bool isDarkMode;
   final String language;
+  final String followerRequests;
+  final String acceptedFollowRequests;
+  final String accountSuggestions;
+  final String mentionsInBio;
   final dynamic updatedAt;
 
   SettingModel({
@@ -10,6 +14,10 @@ class SettingModel {
     this.isNotificationsEnabled = true,
     this.isDarkMode = false,
     this.language = 'en',
+    this.followerRequests = 'On',
+    this.acceptedFollowRequests = 'On',
+    this.accountSuggestions = 'On',
+    this.mentionsInBio = 'From everyone',
     this.updatedAt,
   });
 
@@ -19,6 +27,10 @@ class SettingModel {
       'isNotificationsEnabled': isNotificationsEnabled,
       'isDarkMode': isDarkMode,
       'language': language,
+      'followerRequests': followerRequests,
+      'acceptedFollowRequests': acceptedFollowRequests,
+      'accountSuggestions': accountSuggestions,
+      'mentionsInBio': mentionsInBio,
       'updatedAt': updatedAt,
     };
   }
@@ -29,6 +41,10 @@ class SettingModel {
       isNotificationsEnabled: json['isNotificationsEnabled'] as bool? ?? true,
       isDarkMode: json['isDarkMode'] as bool? ?? false,
       language: json['language'] as String? ?? 'en',
+      followerRequests: json['followerRequests'] as String? ?? 'On',
+      acceptedFollowRequests: json['acceptedFollowRequests'] as String? ?? 'On',
+      accountSuggestions: json['accountSuggestions'] as String? ?? 'On',
+      mentionsInBio: json['mentionsInBio'] as String? ?? 'From everyone',
       updatedAt: json['updatedAt'],
     );
   }
@@ -38,6 +54,10 @@ class SettingModel {
     bool? isNotificationsEnabled,
     bool? isDarkMode,
     String? language,
+    String? followerRequests,
+    String? acceptedFollowRequests,
+    String? accountSuggestions,
+    String? mentionsInBio,
     dynamic updatedAt,
   }) {
     return SettingModel(
@@ -45,6 +65,10 @@ class SettingModel {
       isNotificationsEnabled: isNotificationsEnabled ?? this.isNotificationsEnabled,
       isDarkMode: isDarkMode ?? this.isDarkMode,
       language: language ?? this.language,
+      followerRequests: followerRequests ?? this.followerRequests,
+      acceptedFollowRequests: acceptedFollowRequests ?? this.acceptedFollowRequests,
+      accountSuggestions: accountSuggestions ?? this.accountSuggestions,
+      mentionsInBio: mentionsInBio ?? this.mentionsInBio,
       updatedAt: updatedAt ?? this.updatedAt,
     );
   }
