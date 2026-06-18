@@ -11,10 +11,29 @@ import 'package:santvani_app/theme/app_theme.dart';
 import 'package:santvani_app/utils/app_enums.dart';
 import 'package:santvani_app/utils/flavors.dart';
 
+import 'package:santvani_app/helper/deep_link/deep_link_service.dart';
+
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    DeepLinkService.instance.init();
+  }
+
+  @override
+  void dispose() {
+    DeepLinkService.instance.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(final BuildContext context) {
