@@ -179,7 +179,7 @@ class AuthRepoImp implements AuthRepo {
         'name': fullName,
         'email': email,
         'phoneNumber': e164Phone,
-        'bio': 'Jay Ma Chamunda 🙏',
+        'bio': '',
         'gender': requestParams.gender,
         'birthDate': requestParams.dateOfBirth,
         'country': requestParams.county,

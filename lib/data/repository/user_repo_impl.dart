@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -57,6 +60,19 @@ class UserRepoImpl implements UserRepo {
           await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
       final Map<String, dynamic>? data = doc.data();
 
+      final String rawBio = data?['bio'] ?? '';
+      final String cleanBio = rawBio == 'Jay Ma Chamunda 🙏' ? '' : rawBio;
+
+      if (rawBio == 'Jay Ma Chamunda 🙏') {
+        unawaited(
+          FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .update(<String, dynamic>{'bio': ''})
+              .catchError((final Object e) => debugPrint('Error cleaning up old default bio: $e')),
+        );
+      }
+
       return Right(
         UserDataModel(
           userRegistrationId: data?['user_registration_id'] ?? 1,
@@ -67,7 +83,7 @@ class UserRepoImpl implements UserRepo {
           authToken: await user.getIdToken(),
           uid: data?['uid'] ?? user.uid,
           username: data?['username'] ?? 'nikul_prajapati',
-          bio: data?['bio'] ?? 'Jay Ma Chamunda 🙏',
+          bio: cleanBio,
           photoUrl: data?['photoUrl'] ?? data?['profile_image'] ?? '',
           followersCount: data?['followersCount'] ?? 0,
           followingCount: data?['followingCount'] ?? 0,

@@ -512,7 +512,7 @@ class _HomePostWidgetState extends State<HomePostWidget> with SingleTickerProvid
                                 ],
                               ),
                               child: const Icon(
-                                Icons.spa_rounded, // Gorgeous blooming lotus popup for double tap
+                                Icons.favorite_rounded, // Gorgeous heart popup for double tap
                                 color: Color(0xFFFF9933),
                                 size: 68,
                               ),
@@ -543,7 +543,14 @@ class _HomePostWidgetState extends State<HomePostWidget> with SingleTickerProvid
                       ),
                       onPressed: () => _onLikeToggled(ctx),
                     ),
-                    const SizedBox(width: 2),
+                    Text(
+                      '$_likesCount',
+                      style: dMSansW700.copyWith(
+                        fontSize: 12.5,
+                        color: const Color(0xFF5D4037),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
                     // Comment button
                     IconButton(
                       icon: const Icon(
@@ -599,26 +606,8 @@ class _HomePostWidgetState extends State<HomePostWidget> with SingleTickerProvid
           Padding(
             padding: const EdgeInsets.only(left: 14, right: 14, bottom: 14),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                // Soft Blessings count text instead of dry social like count
-                Row(
-                  children: <Widget>[
-                    const Icon(
-                      Icons.star_rounded,
-                      size: 14,
-                      color: Color(0xFFFFB300),
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      '$_likesCount Blessings',
-                      style: dMSansW700.copyWith(
-                        fontSize: 11.5,
-                        color: const Color(0xFF5D4037),
-                      ),
-                    ),
-                  ],
-                ),
                 // Timestamp
                 Text(
                   widget.post.timeAgo.toUpperCase(),
