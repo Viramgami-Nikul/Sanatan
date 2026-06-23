@@ -12,6 +12,7 @@ import 'package:santvani_app/views/home/widget/home_post_widget.dart';
 import 'package:santvani_app/views/post/post_detail_screen.dart';
 import 'package:santvani_app/data/models/reel/reel_model.dart';
 import 'package:santvani_app/views/reel/widget/reel_item_widget.dart';
+import 'package:video_player/video_player.dart';
 
 class SavedPostsScreen extends StatefulWidget {
   const SavedPostsScreen({super.key});
@@ -147,16 +148,7 @@ class _SavedPostsScreenState extends State<SavedPostsScreen> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: isReel
-                  ? Container(
-                      color: const Color(0xFFFFF3E0),
-                      child: const Center(
-                        child: Icon(
-                          Icons.play_circle_outline_rounded,
-                          color: Color(0xFFFFB300),
-                          size: 40,
-                        ),
-                      ),
-                    )
+                  ? GridVideoPlayerWidget(videoUrl: post.postImageUrl)
                   : post.postImageUrl.isNotEmpty
                       ? Image.network(post.postImageUrl, fit: BoxFit.cover)
                       : Container(
@@ -244,6 +236,107 @@ class _SavedPostsScreenState extends State<SavedPostsScreen> {
                 },
               );
             },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class GridVideoPlayerWidget extends StatefulWidget {
+  const GridVideoPlayerWidget({super.key, required this.videoUrl});
+
+  final String videoUrl;
+
+  @override
+  State<GridVideoPlayerWidget> createState() => _GridVideoPlayerWidgetState();
+}
+
+class _GridVideoPlayerWidgetState extends State<GridVideoPlayerWidget> {
+  late VideoPlayerController _controller;
+  bool _isInitialized = false;
+  bool _hasError = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeController();
+  }
+
+  Future<void> _initializeController() async {
+    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl));
+    try {
+      await _controller.initialize();
+      if (mounted) {
+        setState(() {
+          _isInitialized = true;
+        });
+        await _controller.setVolume(0.0);
+        await _controller.setLooping(true);
+        await _controller.play();
+      }
+    } catch (e) {
+      debugPrint('Error initializing video preview: $e');
+      if (mounted) {
+        setState(() {
+          _hasError = true;
+        });
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(final BuildContext context) {
+    if (_hasError) {
+      return Container(
+        color: const Color(0xFFFFF3E0),
+        child: const Center(
+          child: Icon(
+            Icons.play_circle_outline_rounded,
+            color: Color(0xFFFFB300),
+            size: 40,
+          ),
+        ),
+      );
+    }
+    if (_isInitialized) {
+      return Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          FittedBox(
+            fit: BoxFit.cover,
+            child: SizedBox(
+              width: _controller.value.size.width,
+              height: _controller.value.size.height,
+              child: VideoPlayer(_controller),
+            ),
+          ),
+          const Align(
+            alignment: Alignment.center,
+            child: Icon(
+              Icons.play_arrow_rounded,
+              color: Colors.white70,
+              size: 28,
+            ),
+          ),
+        ],
+      );
+    }
+    return Container(
+      color: const Color(0xFFFFF3E0),
+      child: const Center(
+        child: SizedBox(
+          width: 20,
+          height: 20,
+          child: CircularProgressIndicator(
+            strokeWidth: 2,
+            color: Color(0xFFFFB300),
           ),
         ),
       ),
