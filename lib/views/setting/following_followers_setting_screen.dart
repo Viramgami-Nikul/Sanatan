@@ -156,6 +156,7 @@ class _FollowingFollowersSettingScreenState extends State<FollowingFollowersSett
                         const Divider(height: 1, color: Color(0xFFFFF3E0)),
 
                         // 2. Accepted follow requests
+
                         _buildSectionHeader('Accepted follow requests'),
                         _buildOptionRow(
                           title: 'Off',

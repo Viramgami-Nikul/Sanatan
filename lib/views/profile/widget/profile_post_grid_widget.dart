@@ -2,11 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:video_player/video_player.dart';
 import 'package:santvani_app/bloc/user/profile_bloc.dart';
+import 'package:santvani_app/data/models/reel/reel_model.dart';
 import 'package:santvani_app/data/models/response_model/auth/user_data_model.dart';
 import 'package:santvani_app/theme/font_styles.dart';
 import 'package:santvani_app/views/home/widget/home_post_widget.dart';
 import 'package:santvani_app/views/post/post_detail_screen.dart';
+import 'package:santvani_app/views/reel/user_reels_play_screen.dart';
 
 class ProfilePostGridWidget extends StatefulWidget {
   const ProfilePostGridWidget({super.key});
@@ -296,9 +299,251 @@ class _ProfilePostGridWidgetState extends State<ProfilePostGridWidget> {
               );
             },
           )
+        else if (_selectedTab == 1)
+          StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection('reels')
+                .where('uid', isEqualTo: currentUid)
+                .snapshots(),
+            builder: (final BuildContext context, final AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(40.0),
+                    child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFFE65100)),
+                  ),
+                );
+              }
+
+              final List<QueryDocumentSnapshot> rawDocs = snapshot.data?.docs ?? <QueryDocumentSnapshot>[];
+              
+              // Map to ReelModel and sort by createdAt descending
+              final List<ReelModel> reels = rawDocs.map((final doc) {
+                return ReelModel.fromJson(doc.data() as Map<String, dynamic>);
+              }).toList();
+
+              reels.sort((final a, final b) {
+                final dynamic aTime = a.createdAt;
+                final dynamic bTime = b.createdAt;
+                
+                if (aTime == null && bTime == null) return 0;
+                if (aTime == null) return -1;
+                if (bTime == null) return 1;
+                
+                DateTime? aDate;
+                DateTime? bDate;
+                if (aTime is Timestamp) {
+                  aDate = aTime.toDate();
+                } else if (aTime is DateTime) {
+                  aDate = aTime;
+                }
+                
+                if (bTime is Timestamp) {
+                  bDate = bTime.toDate();
+                } else if (bTime is DateTime) {
+                  bDate = bTime;
+                }
+                
+                if (aDate == null && bDate == null) return 0;
+                if (aDate == null) return -1;
+                if (bDate == null) return 1;
+                return bDate.compareTo(aDate);
+              });
+
+              if (reels.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      const SizedBox(height: 48),
+                      const Icon(Icons.movie_filter_rounded, size: 48, color: Color(0xFFFF9933)),
+                      const SizedBox(height: 12),
+                      Text(
+                        'No Reels Yet',
+                        style: dMSansW700.copyWith(fontSize: 15, color: const Color(0xFF3E2723)),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        'Your spiritual reels will appear here. 🌸🎥',
+                        style: dMSansW500.copyWith(fontSize: 11.5, color: const Color(0xFF8D6E63)),
+                      ),
+                      const SizedBox(height: 48),
+                    ],
+                  ),
+                );
+              }
+
+              return Padding(
+                padding: const EdgeInsets.all(12),
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
+                  ),
+                  itemCount: reels.length,
+                  itemBuilder: (final BuildContext context, final int index) {
+                    final ReelModel reel = reels[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute<void>(
+                            builder: (final BuildContext context) => UserReelsPlayScreen(
+                              reels: reels,
+                              initialIndex: index,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFFDF6),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: const Color(0xFFFFE0B2).withValues(alpha: 0.8),
+                            width: 1.2,
+                          ),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                              color: const Color(0xFFFF9933).withValues(alpha: 0.05),
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Stack(
+                            fit: StackFit.expand,
+                            children: <Widget>[
+                              ReelThumbnailWidget(videoUrl: reel.videoUrl),
+                              Positioned(
+                                right: 6,
+                                top: 6,
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withValues(alpha: 0.4),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.play_arrow_rounded,
+                                    size: 16,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                left: 8,
+                                bottom: 8,
+                                child: Row(
+                                  children: <Widget>[
+                                    const Icon(
+                                      Icons.favorite_rounded,
+                                      size: 12,
+                                      color: Colors.white,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      '${reel.likesCount}',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
+          )
         else
           const SizedBox(height: 300), // Show blank section
       ],
+    );
+  }
+}
+
+class ReelThumbnailWidget extends StatefulWidget {
+  const ReelThumbnailWidget({super.key, required this.videoUrl});
+
+  final String videoUrl;
+
+  @override
+  State<ReelThumbnailWidget> createState() => _ReelThumbnailWidgetState();
+}
+
+class _ReelThumbnailWidgetState extends State<ReelThumbnailWidget> {
+  VideoPlayerController? _controller;
+  bool _isInitialized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeController();
+  }
+
+  Future<void> _initializeController() async {
+    try {
+      _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl));
+      await _controller!.initialize();
+      if (mounted) {
+        setState(() {
+          _isInitialized = true;
+        });
+      }
+    } catch (e) {
+      debugPrint('Error initializing thumbnail controller: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(final BuildContext context) {
+    if (_isInitialized && _controller != null) {
+      return FittedBox(
+        fit: BoxFit.cover,
+        child: SizedBox(
+          width: _controller!.value.size.width,
+          height: _controller!.value.size.height,
+          child: VideoPlayer(_controller!),
+        ),
+      );
+    }
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: <Color>[Color(0xFFFFF3E0), Color(0xFFFFE0B2)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: const Center(
+        child: SizedBox(
+          width: 20,
+          height: 20,
+          child: CircularProgressIndicator(
+            strokeWidth: 2,
+            color: Color(0xFFE65100),
+          ),
+        ),
+      ),
     );
   }
 }
